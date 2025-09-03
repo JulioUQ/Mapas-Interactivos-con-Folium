@@ -18,12 +18,13 @@ folium-gestion-pesquera/
 ├── data/ # Datos de ejemplo (GeoJSON, CSV, shapefiles)  
 ├── notebooks/ # Jupyter Notebooks con ejemplos prácticos  
 │ ├── 01_basicos_folium.ipynb  
-│ ├── 02_capas_geojson.ipynb  
-│ ├── 03_visualizacion_especies.ipynb  
-│ └── 04_interactividad_filtros.ipynb  
-├── scripts/ # Scripts Python reutilizables  
+│ ├── 02_capas_y_controles_folium.ipynb  
+│ ├── 03_mapas_avanzados.ipynb  
+│ └── 04_Actividades_prácticas.ipynb  
+├── scripts/ # Scripts Python reutilizables 
+│ ├── geo_functions.py  
 │ └── folium_utils.py   
-└── img/ # Capturas de ejemplo para el README
+└── img/ # Capturas de ejemplo para el README y mapas con folium
 ````
 
 ##  Instalación
