@@ -263,3 +263,99 @@ def añadir_etiquetas_por_poligono(m, gdf, columna, color_texto="black"):
                     html=f'<div style="font-size: 11pt; font-weight: bold; color: {color_texto}">{valor}</div>',
                 )
             ).add_to(m)
+
+
+def crear_ruta(
+    gdf_puntos, 
+    mapa=None,
+    lat_col="Latitud", 
+    lon_col="Longitud", 
+    fecha_col="Fecha", 
+    hora_col="Hora", 
+    vel_col="Velocidad", 
+    rumbo_col="Rumbo",
+    buque_col="Buque", 
+    marea_col="HojaMarea"
+):
+    """
+    Añade a un mapa folium la ruta de una marea (línea + puntos de inicio/fin).
+    
+    Parámetros
+    ----------
+    gdf_puntos : GeoDataFrame
+        GeoDataFrame con los puntos de la marea seleccionada.
+    mapa : folium.Map, optional
+        Mapa de folium sobre el que añadir la ruta. Si None, se crea uno centrado en la marea.
+    lat_col, lon_col : str
+        Nombre de las columnas con latitud y longitud.
+    fecha_col, hora_col : str
+        Columnas de fecha y hora.
+    vel_col, rumbo_col : str
+        Columnas de velocidad y rumbo.
+    buque_col, marea_col : str
+        Columnas de identificación del buque y marea.
+    
+    Retorna
+    -------
+    folium.Map
+        Mapa con la ruta añadida.
+    """
+    
+    # Ordenar puntos por tiempo
+    gdf_marea = gdf_puntos.dropna(subset=[lat_col, lon_col]).copy()
+    gdf_marea = gdf_marea.sort_values(by=[fecha_col, hora_col])
+
+    # Crear mapa base si no se pasa uno
+    if mapa is None:
+        mapa = folium.Map(
+            location=[gdf_marea[lat_col].mean(), gdf_marea[lon_col].mean()],
+            zoom_start=8,
+            tiles="CartoDB positron"
+        )
+
+    # Coordenadas de la ruta
+    coords = gdf_marea[[lat_col, lon_col]].values.tolist()
+
+    # Tooltip resumen para la línea
+    fecha_min = gdf_marea[fecha_col].min()
+    fecha_max = gdf_marea[fecha_col].max()
+    tooltip_text = (
+        f"<b>Buque:</b> {gdf_marea[buque_col].iloc[0]} <br>"
+        f"<b>Hoja de Marea</b>: {gdf_marea[marea_col].iloc[0]} <br>"
+        f"<b>Número de puntos</b>: {len(gdf_marea)} <br>"
+        f"<b>Fecha inicio</b>: {fecha_min} <br>"
+        f"<b>Fecha fin</b>: {fecha_max}"
+    )
+
+    # Dibujar la ruta
+    folium.PolyLine(
+        locations=coords,
+        color="blue",
+        weight=3,
+        opacity=0.8,
+        tooltip=tooltip_text
+    ).add_to(mapa)
+
+    # Marcar inicio y fin
+    primer_punto = gdf_marea.iloc[0]
+    ultimo_punto = gdf_marea.iloc[-1]
+
+    folium.Marker(
+        location=[primer_punto[lat_col], primer_punto[lon_col]],
+        popup=(f"<b>Inicio</b><br>"
+               f"Vel: {primer_punto[vel_col]} nudos<br>"
+               f"Rumbo: {primer_punto[rumbo_col]}"),
+        icon=folium.Icon(color="green", icon="play"),
+        tooltip="Inicio"
+    ).add_to(mapa)
+
+    folium.Marker(
+        location=[ultimo_punto[lat_col], ultimo_punto[lon_col]],
+        popup=(f"<b>Fin</b><br>"
+               f"Vel: {ultimo_punto[vel_col]} nudos<br>"
+               f"Rumbo: {ultimo_punto[rumbo_col]}"),
+        icon=folium.Icon(color="red", icon="flag"),
+        tooltip="Fin"
+    ).add_to(mapa)
+
+    return mapa
