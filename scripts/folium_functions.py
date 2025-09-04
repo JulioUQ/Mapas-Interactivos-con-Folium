@@ -68,20 +68,11 @@ def añadir_puntos(
     color_dict=None
 ):
     """
-    Añade puntos al mapa, creando un FeatureGroup por categoría si se indica color_col.
-    Funciona con columna 'geometry' o columnas de latitud/longitud.
-
-    Parámetros:
-        m (folium.Map): Mapa base.
-        gdf (GeoDataFrame o DataFrame): Datos con coordenadas.
-        lat_col (str): Columna de latitud.
-        lon_col (str): Columna de longitud.
-        color_col (str): Columna que define el color/categoría.
-        tooltip_text (str o lista): Columnas para tooltip.
-        cmap_name (str): Nombre de colormap (solo si no se pasa color_dict).
-        color_dict (dict): Diccionario {categoria: color_hex} opcional.
+    Añade puntos al mapa. Si `m` es un FeatureGroup, se insertan los marcadores
+    directamente en ese FeatureGroup (útil para 'una marea = un FeatureGroup').
+    Si `m` es un folium.Map, se comporta como antes (creando FeatureGroups por categoría).
     """
-    
+
     # Preparar colores
     if color_col:
         categorias = gdf[color_col].unique()
@@ -94,12 +85,54 @@ def añadir_puntos(
         internal_color_dict = {None: "blue"}
         categorias = [None]
 
-    # Crear FeatureGroup por categoría
+    # Si 'm' ya es un FeatureGroup, añadimos TODO directamente a ese contenedor
+    is_featuregroup = isinstance(m, folium.map.FeatureGroup) or isinstance(m, folium.features.FeatureGroup)
+
+    if is_featuregroup:
+        parent = m  # añadimos los marcadores directamente a este FeatureGroup
+        # Si hay color_col mantenemos el color de cada punto pero no creamos sub-FG
+        subset_iter = gdf.iterrows()
+        for _, row in subset_iter:
+            # Coordenadas
+            if "geometry" in gdf.columns and row.geometry is not None:
+                lat, lon = row.geometry.y, row.geometry.x
+            else:
+                lat, lon = row[lat_col], row[lon_col]
+
+            # Tooltip
+            if isinstance(tooltip_text, list):
+                tooltip_html = "<br>".join(f"{col}: {row.get(col, '')}" for col in tooltip_text)
+            elif isinstance(tooltip_text, str):
+                tooltip_html = row.get(tooltip_text, tooltip_text)
+            else:
+                tooltip_html = None
+
+            # Color según color_col (si existe)
+            if color_col:
+                fg_color = internal_color_dict.get(row.get(color_col), "blue")
+            else:
+                fg_color = internal_color_dict.get(None, "blue")
+
+            folium.CircleMarker(
+                location=[lat, lon],
+                radius=2,
+                color=fg_color,
+                fill=True,
+                fill_color=fg_color,
+                fill_opacity=0.7,
+                tooltip=folium.Tooltip(tooltip_html, sticky=True) if tooltip_html else None
+            ).add_to(parent)
+
+        # No hacemos parent.add_to(...) aquí: asumimos que el caller (tu bucle por marea)
+        # añadirá ese FeatureGroup al mapa con fg.add_to(mapa)
+        return
+
+    # Si no es FeatureGroup: comportamiento original (creando FeatureGroups por categoría)
     for cat in categorias:
         fg_name = str(cat) if cat is not None else "Puntos"
         fg_color = internal_color_dict.get(cat, "blue")
         fg = folium.FeatureGroup(name=f'<span style="color:{fg_color}">{fg_name}</span>', show=True)
-        
+
         subset = gdf[gdf[color_col] == cat] if color_col else gdf
 
         for _, row in subset.iterrows():
@@ -111,9 +144,9 @@ def añadir_puntos(
 
             # Tooltip
             if isinstance(tooltip_text, list):
-                tooltip_html = "<br>".join(f"{col}: {row[col]}" for col in tooltip_text)
+                tooltip_html = "<br>".join(f"{col}: {row.get(col, '')}" for col in tooltip_text)
             elif isinstance(tooltip_text, str):
-                tooltip_html = row[tooltip_text] if tooltip_text in gdf.columns else tooltip_text
+                tooltip_html = row.get(tooltip_text, tooltip_text)
             else:
                 tooltip_html = None
 
@@ -126,8 +159,9 @@ def añadir_puntos(
                 fill_opacity=0.7,
                 tooltip=folium.Tooltip(tooltip_html, sticky=True) if tooltip_html else None
             ).add_to(fg)
-        
+
         fg.add_to(m)
+
 
 
 
