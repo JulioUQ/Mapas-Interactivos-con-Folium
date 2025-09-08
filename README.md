@@ -1,7 +1,3 @@
-Aquí tienes una versión reescrita del README, más clara, estructurada y completa, manteniendo toda la información y agregando un poco más de contexto y detalle para cada sección:
-
----
-
 # Mapas Interactivos con Folium para Gestión Pesquera
 
 Este repositorio tiene como objetivo **aprender, comprender y aplicar** la librería [Folium](https://python-visualization.github.io/folium/) para la creación de **mapas interactivos y animados** enfocados en la **gestión pesquera**.
