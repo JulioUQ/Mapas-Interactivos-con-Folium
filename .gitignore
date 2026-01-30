@@ -2,4 +2,4 @@
 .DS_Store/
 **/__pycache__/
 config/
-img/02/*.html
+img/**/*.html
