@@ -6,43 +6,39 @@
 
   
 
-<li><a href="#1-introduccion-a-folium">1. Introducción a Folium</a></li>
+<li><a href="#1-capas-y-controles">1. Capas y Controles</a></li>
 
   <ul style="list-style-type:none">
 
-    <li><a href="#1-1-que-es-folium">1.1. ¿Qué es Folium?</a></li>
+    <li><a href="#1-1-capas-de-marcadores-folium-featuregroup">1.1. Capas de marcadores (<em>folium.FeatureGroup</em>)</a></li>
 
-    <li><a href="#1-2-instalacion-y-configuracion-inicial">1.2. Instalación y configuración inicial</a></li>
+    <li><a href="#1-2-capas-de-poligonos-y-lineas-folium-polygon-y-folium-polyline">1.2. Capas de polígonos y líneas (<em>folium.Polygon</em>, <em>folium.PolyLine</em>)</a></li>
 
-    <li><a href="#1-3-primer-mapa-con-folium-map">1.3. Primer mapa con <em>folium.Map</em></a></li>
+    <li><a href="#1-3-control-de-capas-y-visibilidad-folium-layercontrol">1.3. Control de capas y visibilidad (<em>folium.LayerControl</em>)</a></li>
 
   </ul>
 
   
 
-<li><a href="#2-conceptos-fundamentales">2. Conceptos Fundamentales</a></li>
+<li><a href="#2-integracion-con-datos">2. Integración con Datos</a></li>
 
   <ul style="list-style-type:none">
 
-    <li><a href="#2-1-estructura-basica-de-un-mapa">2.1. Estructura básica de un mapa</a></li>
+    <li><a href="#2-1-importar-datos-desde-csv-con-pandas">2.1. Importar datos desde CSV con Pandas</a></li>
 
-    <li><a href="#2-2-guardado-y-visualizacion-de-mapas">2.2. Guardado y visualización de mapas</a></li>
+    <li><a href="#2-2-visualizacion-de-datos-con-geojson">2.2. Visualización de datos con GeoJSON</a></li>
+
+    <li><a href="#2-3-mapas-coropleticos-folium-choropleth">2.3. Mapas coropléticos (<em>folium.Choropleth</em>)</a></li>
 
   </ul>
 
   
 
-<li><a href="#3-elementos-basicos-en-folium">3. Elementos Básicos en Folium</a></li>
+<li><a href="#3-personalizacion-avanzada">3. Personalización Avanzada</a></li>
 
   <ul style="list-style-type:none">
 
-    <li><a href="#3-1-marcadores-simples-folium-marker">3.1. Marcadores simples (<em>folium.Marker</em>)</a></li>
-
-    <li><a href="#3-2-marcadores-simples-folium-circlemarker">3.2. Marcadores simples (<em>folium.CircleMarker</em>)</a></li>
-
-    <li><a href="#3-3-elementos-del-marcador-folium-tooltip">3.3. Elementos del marcador (<em>folium.Tooltip</em>)</a></li>
-
-    <li><a href="#3-4-iconos-personalizados-folium-divicon">3.4. Iconos personalizados (<em>folium.DivIcon</em>)</a></li>
+    <li><a href="#3-1-colores-y-estilos-dinamicos">3.1. Colores y estilos dinámicos</a></li>
 
   </ul>
 
@@ -51,55 +47,47 @@
 </ul>
 
 
+Modifica el indice anterior asi como sus enlaces con el titulo de los apartados, por los apartados siguientes:
 
+<a id="1-capas-y-controles"></a>
 
+<a id="1-capas-y-controles"></a>
 
-Los encunciados de los apartados son:
+# 1. Capas en mapas interactivos con Folium
 
-<a id="1-introduccion-a-folium"></a>
+<a id="1-1-capas-de-marcadores-folium-featuregroup"></a>
 
-<a id="1-introduccion-a-folium"></a>
+## 1.1. Capas agrupadas: Clase [folium.FeatureGroup](https://python-visualization.github.io/folium/latest/user_guide/plugins/featuregroup_subgroup.html)
 
-# 1. Introducción a Folium
-<a id="1-1-que-es-folium"></a>
+## 1.2 Segmentación temporal de las posiciones de captura
+## 1.3 Creación de capas temáticas con `FeatureGroup`
 
-## 1.1. ¿Qué es Folium?
+<a id="1-2-control-de-capas-y-visibilidad-folium-layercontrol"></a>
 
-<a id="1-2-instalacion-y-configuracion-inicial"></a>
+# 2. Control de capas e interactividad del mapa - Clase [LayerControl](https://python-visualization.github.io/folium/modules.html#folium.map.LayerControl)
 
-## 1.2. Instalación y configuración inicial
+<a id="1-3-1-lineas-folium-polyline"></a>
 
-## 1.3. Primer mapa con folium
+# 3. Líneas - Clase [`folium.PolyLine`](https://python-visualization.github.io/folium/latest/user_guide/vector_layers/polyline.html)
 
-### 1.3.1. Estructura básica de un mapa - Clase [Map](https://python-visualization.github.io/folium/modules.html#folium.folium.Map)
+## 3.1. Representación de geometrías tipo `LineString` - [Linea base recta (LBR)](https://centrodedescargas.cnig.es/CentroDescargas/lineas-base-rectas)
 
-### 1.3.2. Añadir tile desde URL - Método [add_tile_layer()](https://python-visualization.github.io/folium/modules.html#folium.folium.Map.add_tile_layer)
-### 1.3.3. Guardar el mapa en HTML - Método [save()](https://python-visualization.github.io/folium/modules.html#folium.folium.Map.save)
+## 3.2 Representación de rutas de pesca
 
-# 2. Importación y preparación de los datos
+### 3.2.1 Construcción de la geometría lineal con `folium.PolyLine`
 
-## 2.1. Importación de posiciones desde bases de datos (SQL)
+### 3.2.2. `PolyLine` como elemento informativo interactivo
 
-## 2.2. Importación desde ficheros tabulares (CSV, Excel)
+### 3.2.3. Combinación de líneas y puntos: lectura completa de la trayectoria
 
-## 2.3. Importación de datos geoespaciales (Shapefile, GeoPackage, GeoJSON)
+### 3.2.4. Integración de la ruta en una capa (`FeatureGroup`)
 
-## 2.4. Creación manual de posiciones a partir de coordenadas
+# 4. Polígonos - Clase [`folium.Polygon`](https://python-visualization.github.io/folium/latest/user_guide/vector_layers/polygon.html)
 
-## 2.5. Estandarización de los datos para Folium
+## 4.1. Zonas de veda espacial en el Golfo de Cádiz
 
-# 3. Visualización de posiciones de pesca
+# 5. Geometrías GeoJSON - Clase [`folium.GeoJson`](https://python-visualization.github.io/folium/latest/user_guide/geojson/geojson.html)
 
-## 3.1. Seguimiento pesquero - Clase [CircleMarker](https://python-visualization.github.io/folium/modules.html#folium.vector_layers.CircleMarker)
+## 5.1. Representación de geometrías tipo `MultiPolygon` - Zonas FAO
 
-## 3.2. Ajustar limites espaciales del mapa
-
-## 3.2. Incluir posiciones en el mapa (usando Latitud y Longitud)
-
-## 3.3. Incluir posiciones en el mapa (usando Geometria = POINT)
-
-# 4. Información interactiva en mapas: Clase [popup](https://python-visualization.github.io/folium/latest/user_guide/ui_elements/popups.html) y [tooltip](https://juncotic.com/introduccion-a-los-marcadores-en-folium-iconos-colores-y-tooltips/)
-
-## 4.1. Popup: información detallada bajo demanda
-
-## 4.2. Tooltip: información rápida en contexto
+## 5.2. Etiquetas e iconos en el mapa - Clase `folium.Marker`
