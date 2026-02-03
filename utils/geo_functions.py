@@ -43,6 +43,13 @@ def gdf_FAO() -> gpd.GeoDataFrame:
     gdf = gpd.read_file(ruta_fao)
     return gdf.to_crs(epsg=4326) if gdf.crs else gdf.set_crs(epsg=4326)
 
+def gdf_RectIces() -> gpd.GeoDataFrame:
+    """Carga capa de Rectángulos de Ices como GeoDataFrame en EPSG:4326."""
+    ruta_rect_ices = Path(r'P:\Proyectos\CALCULO_CIERRES\CONTROL CALIDAD\TeoríaSIPE\Programacion\Directorio GIS con QGIS\GIS_2.0\RectangulosEstadisticosICES\RectangulosEstadisticosICES.shp')
+    ruta_rect_ices = Path(str(ruta_rect_ices))  # fuerza codificación compatible
+    gdf = gpd.read_file(ruta_rect_ices)
+    return gdf.to_crs(epsg=4326) if gdf.crs else gdf.set_crs(epsg=4326)
+
 def gdf_ZEE() -> gpd.GeoDataFrame:
     """Carga capa de ZEE como GeoDataFrame en EPSG:4326."""
     ruta_zee = Path(r'P:\Proyectos\CALCULO_CIERRES\CONTROL CALIDAD\TeoríaSIPE\Programacion\Directorio GIS con QGIS\GIS_2.0\ZonasZEE\ZonasZEE.shp')
