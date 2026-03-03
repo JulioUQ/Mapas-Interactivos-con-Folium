@@ -12,8 +12,3 @@ img/**/*.html
 data/Actividades/DatosPosicionamiento/Puntos VMS.csv
 data/Actividades/mapa_interactivo_Act1.html
 
-# Datos pesados (opcional)
-# data/raw/
-# data/intermediate/
-# *.shp
-# *.gpkg
