@@ -1,2 +1,4 @@
 *.shp filter=lfs diff=lfs merge=lfs -text
 data/LIC[[:space:]]INTERMARES/LIC_Intemares_com_zon_MMED_MATL_20250218.shp filter=lfs diff=lfs merge=lfs -text
+*.csv filter=lfs diff=lfs merge=lfs -text
+*.html filter=lfs diff=lfs merge=lfs -text
