@@ -1,5 +1,15 @@
 .vscode/
-.DS_Store/
+.DS_Store
 **/__pycache__/
+
+# Configuración sensible
 config/
+
+# Archivos generados
 img/**/*.html
+
+# Datos pesados (opcional)
+# data/raw/
+# data/intermediate/
+# *.shp
+# *.gpkg

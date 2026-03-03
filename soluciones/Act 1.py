@@ -11,7 +11,7 @@ import os
 
 # === 2. Definición de rutas de archivos ===
 # Modifica las rutas según tu entorno de trabajo
-ruta_datos = r"C:\Users\jubeda2\Documents\git\Mapas-Interactivos-con-Folium\data\Actividades\Act 1 - Puntos VMS.csv"       # Archivo csv con columnas Latitud y Longitud
+ruta_datos = r"C:\Users\jubeda2\Documents\git\Mapas-Interactivos-con-Folium\data\Actividades\Puntos VMS.csv"       # Archivo csv con columnas Latitud y Longitud
 ruta_gsa = r"C:\Users\jubeda2\Documents\git\Mapas-Interactivos-con-Folium\data\Actividades\ZonasGSA\ZonasGSA.shp"    # Capa poligonal
 ruta_paises = r"C:\Users\jubeda2\Documents\git\Mapas-Interactivos-con-Folium\data\Actividades\WorldCountries\WorldCountries.shp"    # Capa poligonal
 ruta_salida = r"C:\Users\jubeda2\Documents\git\Mapas-Interactivos-con-Folium\data\Actividades\mapa_interactivo_Act1.html"   # Archivo HTML de salida (opcional)
@@ -53,8 +53,26 @@ folium.TileLayer(
         control=False  
     ).add_to(m)
 
+# === 6. Capa GSA con tooltip ===
+if capa_gsa.crs is None or capa_gsa.crs.to_string().upper() != "EPSG:4326":
+    capa_gsa = capa_gsa.to_crs(epsg=4326)
 
-# === 6. Puntos con popup ===
+folium.GeoJson(
+    capa_gsa,
+    name="Zonas GSA",
+    style_function=lambda x: {
+        "color": "red",
+        "fillColor": "transparent",
+        "weight": 1.5
+    },
+    tooltip=folium.GeoJsonTooltip(
+        fields=["Descripcio", "NombreGSA", "FaoSubarea"],
+        aliases=["Descripción:", "Nombre GSA:", "FAO Subarea:"],
+        style="font-family: Arial; font-size: 11px;"
+    )
+).add_to(m)
+
+# === 7. Puntos con popup ===
 for _, row in gdf.iterrows():
     popup_html = f"""
     <div style="font-family: Arial, sans-serif; font-size: 12px; padding: 4px 6px; max-width: 240px;">
@@ -78,27 +96,6 @@ for _, row in gdf.iterrows():
         fill_opacity=0.6,
         popup=folium.Popup(popup_html, max_width=260)
     ).add_to(m)
-
-
-# === 7. Capa GSA con tooltip ===
-if capa_gsa.crs is None or capa_gsa.crs.to_string().upper() != "EPSG:4326":
-    capa_gsa = capa_gsa.to_crs(epsg=4326)
-
-folium.GeoJson(
-    capa_gsa,
-    name="Zonas GSA",
-    style_function=lambda x: {
-        "color": "red",
-        "fillColor": "transparent",
-        "weight": 1.5
-    },
-    tooltip=folium.GeoJsonTooltip(
-        fields=["Descripcio", "NombreGSA", "FaoSubarea"],
-        aliases=["Descripción:", "Nombre GSA:", "FAO Subarea:"],
-        style="font-family: Arial; font-size: 11px;"
-    )
-).add_to(m)
-
 
 # === 8. Capa países ===
 if capa_paises.crs is None or capa_paises.crs.to_string().upper() != "EPSG:4326":
